@@ -1,13 +1,18 @@
+/* By Almog Shtaigmann
+ * Mmn 11
+ */
+
 package Mmn11.q1;
 
+import javax.swing.*;
 import java.util.*;
 
+// Class for manage the Hit Game
 public class HitGame {
     private final int TOTAL_DIGITS = 4;
-    private Character[] secretNumber;
-    private String targetNumberString;
-
-    private int previousGuesses;
+    private Character[] secretNumber; // Stores the correct number as a list of chars
+    private String targetNumberString; // Stores the correct number as a String
+    private int previousGuesses; // Counts the number of guesses made so fay by the user
 
     public HitGame() {
         initGame();
@@ -17,18 +22,16 @@ public class HitGame {
         initGame();
     }
 
-    public void printTotalGuesses() {
-        System.out.println("You guessed so far: " + previousGuesses);
-    }
-
-    public void printCorrectGuess() {
-        System.out.println("Your current correct guess is:");
+    // Constructs a string representation of the current correct guess
+    public String getCorrectGuessString() {
+        StringBuilder msg = new StringBuilder(GameMessages.CURRENT_CORRECT_GUESS_MSG);
         for (char digit : secretNumber) {
-            System.out.print(digit);
+            msg.append(digit);
         }
-        System.out.println();
+        return msg.toString();
     }
 
+    // Processes a guess and returns true if it's correct
     public boolean guessNumber(String number) {
         int hitCount = 0;
         int blowsCount = 0;
@@ -41,39 +44,41 @@ public class HitGame {
             }
         }
 
-        printHitCount(hitCount);
-        printBlowsCount(blowsCount);
-
         if (hitCount == 4) {
             return true;
         }
+
+        printHitAndBlowsCount(hitCount, blowsCount);
 
         previousGuesses++;
         return false;
     }
 
-    public void printHitCount(int hits) {
-        System.out.printf("Hits: %d%n", hits);
+    // Displays the number of hits and blows for the current guess
+    public void printHitAndBlowsCount(int hits, int blows) {
+        String msg = String.format(GameMessages.HITS_AND_BLOWS_MSG,
+                hits, blows, getCorrectGuessString());
+        JOptionPane.showMessageDialog(null, msg, GameMessages.WINDOW_TITLE, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void printBlowsCount(int blows) {
-        System.out.printf("Blows %d%n", blows);
-    }
-
-
+    // Displays the winning message
     public void win() {
-        System.out.println("Congratulations! You've guessed the correct number!");
-        System.out.println("The correct number was: " + targetNumberString);
-        System.out.println("You made " + (previousGuesses + 1) + " guesses.");
+        String message = String.format("%s\n%s%s\n%s",
+                GameMessages.CONGRATULATIONS,
+                GameMessages.CORRECT_NUMBER, targetNumberString,
+                String.format(GameMessages.GUESSES_MADE, previousGuesses + 1));
+
+        JOptionPane.showMessageDialog(null, message, GameMessages.WINDOW_TITLE, JOptionPane.INFORMATION_MESSAGE);
     }
 
+    // Initializes or resets the game state
     private void initGame() {
         secretNumber = new Character[TOTAL_DIGITS];
         Arrays.fill(secretNumber, '-');
         previousGuesses = 0;
         generateUniqueFourDigitNumber();
 
-        System.out.println("ALL SET - Lets play!");
+        System.out.println("for cheaters.. see the logs :) ->" + targetNumberString);
     }
 
     /**

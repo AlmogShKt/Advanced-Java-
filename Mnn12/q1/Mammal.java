@@ -1,3 +1,7 @@
+/**
+ * Maman by ALmog Shtaigmann
+ */
+
 package mmn12.q1;
 
 public abstract class Mammal extends Animal {
